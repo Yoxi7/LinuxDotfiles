@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+"""
+cider-ctl - Universal MPRIS / playerctl adapter for Quickshell lite
+Translates playerctl state into JSON expected by Quickshell Player module
+"""
+
+import sys
+import json
+import subprocess
+
+def run_cmd(args):
+    try:
+        return subprocess.check_output(args, text=True, stderr=subprocess.DEVNULL).strip()
+    except Exception:
+        return ""
+
+def get_metadata():
+    if not run_cmd(["command", "-v", "playerctl"]):
+        return {"status": "error", "error": "playerctl not installed"}
+
+    status_str = run_cmd(["playerctl", "status"]).lower()
+    if not status_str:
+        return {"status": "error", "error": "no active players"}
+
+    player = run_cmd(["playerctl", "metadata", "--format", "{{playerName}}"])
+    title = run_cmd(["playerctl", "metadata", "--format", "{{title}}"])
+    artist = run_cmd(["playerctl", "metadata", "--format", "{{artist}}"])
+    album = run_cmd(["playerctl", "metadata", "--format", "{{album}}"])
+    art_url = run_cmd(["playerctl", "metadata", "--format", "{{mpris:artUrl}}"])
+    
+    pos_str = run_cmd(["playerctl", "position"])
+    dur_str = run_cmd(["playerctl", "metadata", "--format", "{{mpris:length}}"])
+
+    try:
+        pos = float(pos_str)
+    except Exception:
+        pos = 0.0
+
+    try:
+        # mpris:length is in microseconds
+        dur_ms = int(dur_str) / 1000.0
+    except Exception:
+        dur_ms = 0.0
+
+    return {
+        "status": "ok",
+        "player": player or "player",
+        "info": {
+            "name": title or "Unknown",
+            "artistName": artist or "",
+            "albumName": album or "",
+            "artwork": {"url": art_url},
+            "isPlaying": status_str == "playing",
+            "durationInMillis": dur_ms,
+            "currentPlaybackTime": pos
+        }
+    }
+
+def main():
+    if len(sys.argv) < 2 or sys.argv[1] == "metadata":
+        print(json.dumps(get_metadata()))
+        return
+
+    cmd = sys.argv[1]
+    if cmd in ("play-pause", "toggle"):
+        subprocess.run(["playerctl", "play-pause"], stderr=subprocess.DEVNULL)
+    elif cmd == "next":
+        subprocess.run(["playerctl", "next"], stderr=subprocess.DEVNULL)
+    elif cmd in ("prev", "previous"):
+        subprocess.run(["playerctl", "previous"], stderr=subprocess.DEVNULL)
+    elif cmd == "seek" and len(sys.argv) > 2:
+        subprocess.run(["playerctl", "position", sys.argv[2]], stderr=subprocess.DEVNULL)
+    elif cmd == "volume":
+        if len(sys.argv) > 2:
+            subprocess.run(["playerctl", "volume", sys.argv[2]], stderr=subprocess.DEVNULL)
+        else:
+            vol = run_cmd(["playerctl", "volume"])
+            print(vol or "1.0")
+
+if __name__ == "__main__":
+    main()

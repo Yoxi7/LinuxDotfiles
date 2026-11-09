@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# cider-vol - Media player volume controller with Quickshell OSD integration
+# ==============================================================================
+
+DIRECTION="${1:-up}"
+
+if [[ "$DIRECTION" == "up" ]]; then
+    playerctl volume 0.05+ 2>/dev/null || wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+ 2>/dev/null
+else
+    playerctl volume 0.05- 2>/dev/null || wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- 2>/dev/null
+fi
+
+if command -v quickshell &>/dev/null; then
+    quickshell ipc call osd player 2>/dev/null || quickshell -c lite ipc call osd player 2>/dev/null || true
+fi

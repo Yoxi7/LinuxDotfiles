@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# files - Launch Yazi in Alacritty terminal file manager
+# ==============================================================================
+
+if command -v yazi &>/dev/null; then
+    if [ -n "$1" ]; then
+        exec alacritty --class yazi,yazi -e yazi "$1"
+    else
+        exec alacritty --class yazi,yazi -e yazi
+    fi
+else
+    echo "yazi: command not found. Please install yazi (e.g. pacman -S yazi)." >&2
+    exit 1
+fi

@@ -1,0 +1,12 @@
+# OS Artifacts
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup*
+*~
+
+# Temporary files
+*.swp
+*.swo

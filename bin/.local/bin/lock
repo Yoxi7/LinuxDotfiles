@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# lock - Screen locker script styled for Retro Sakura
+# ==============================================================================
+
+if command -v swaylock &>/dev/null; then
+    exec swaylock \
+        --daemonize \
+        --color 060608 \
+        --inside-color 0c0c12 \
+        --ring-color 2e2538 \
+        --key-hl-color f3a6b8 \
+        --ring-ver-color f3a6b8 \
+        --inside-ver-color 0c0c12 \
+        --ring-wrong-color ff6961 \
+        --inside-wrong-color 0c0c12 \
+        --line-uses-ring \
+        --separator-color 00000000 \
+        --text-color ffffff
+elif command -v waylock &>/dev/null; then
+    exec waylock -init-color 0x060608 -input-color 0xf3a6b8
+elif command -v hyprlock &>/dev/null; then
+    exec hyprlock
+else
+    loginctl lock-session
+fi

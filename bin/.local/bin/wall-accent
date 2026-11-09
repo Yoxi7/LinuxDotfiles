@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+"""
+wall-accent - Generates primary and accent color theme for Quickshell lite
+from the active wallpaper, with elegant fallback to Retro Sakura palette.
+Writes output to ~/.cache/qs-lite/accent.json
+"""
+
+import sys
+import os
+import json
+from pathlib import Path
+
+CACHE_DIR = Path.home() / ".cache" / "qs-lite"
+CACHE_FILE = CACHE_DIR / "accent.json"
+
+DEFAULT_THEME = {
+    "primary": "#f3a6b8",  # Pastel Sakura Pink
+    "accent": "#ea7a99"   # Deep Sakura Accent
+}
+
+def rgb_to_hex(r, g, b):
+    return f"#{int(r):02x}{int(g):02x}{int(b):02x}"
+
+def extract_colors(img_path):
+    try:
+        from PIL import Image
+        with Image.open(img_path) as img:
+            img = img.convert("RGB")
+            img.thumbnail((120, 120))
+            # Quantize to 8 colors to find dominant palettes
+            quantized = img.quantize(colors=8, method=Image.Quantize.FASTOCTREE)
+            palette = quantized.getpalette()[:24]
+            colors = []
+            for i in range(0, len(palette), 3):
+                r, g, b = palette[i], palette[i+1], palette[i+2]
+                brightness = 0.299*r + 0.587*g + 0.114*b
+                # Avoid extreme dark or pure white
+                if 40 < brightness < 230:
+                    colors.append((r, g, b, brightness))
+
+            if not colors:
+                return DEFAULT_THEME
+
+            # Sort by brightness
+            colors.sort(key=lambda c: c[3], reverse=True)
+            primary = rgb_to_hex(colors[0][0], colors[0][1], colors[0][2])
+            accent = rgb_to_hex(colors[-1][0], colors[-1][1], colors[-1][2]) if len(colors) > 1 else primary
+            return {"primary": primary, "accent": accent}
+    except Exception:
+        return DEFAULT_THEME
+
+def main():
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    theme = DEFAULT_THEME
+
+    if len(sys.argv) > 1 and os.path.isfile(sys.argv[1]):
+        theme = extract_colors(sys.argv[1])
+
+    with open(CACHE_FILE, "w", encoding="utf-8") as f:
+        json.dump(theme, f, indent=2)
+
+if __name__ == "__main__":
+    main()

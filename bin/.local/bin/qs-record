@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# qs-record - Screen recording helper for Quickshell
+# ==============================================================================
+
+REC_DIR="${HOME}/Videos/Recordings"
+PID_FILE="${XDG_RUNTIME_DIR:-/tmp}/qs-record.pid"
+
+stop_record() {
+    if [[ -f "$PID_FILE" ]]; then
+        PID=$(cat "$PID_FILE")
+        if kill -0 "$PID" 2>/dev/null; then
+            kill -INT "$PID" 2>/dev/null || kill "$PID" 2>/dev/null
+        fi
+        rm -f "$PID_FILE"
+    fi
+    pkill -INT -x wf-recorder 2>/dev/null || pkill -INT -x wl-screenrec 2>/dev/null || true
+    exit 0
+}
+
+if [[ "${1:-}" == "--stop" ]]; then
+    stop_record
+fi
+
+mkdir -p "$REC_DIR"
+FILENAME="${REC_DIR}/record_$(date +'%Y-%m-%d_%H-%M-%S').mp4"
+
+REGION=""
+OUTPUT=""
+AUDIO=false
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --region)
+            REGION="$2"; shift 2 ;;
+        --output)
+            OUTPUT="$2"; shift 2 ;;
+        --sound|--audio)
+            AUDIO=true; shift ;;
+        --stop)
+            stop_record ;;
+        *)
+            shift ;;
+    esac
+done
+
+REC_CMD=()
+if command -v wf-recorder &>/dev/null; then
+    REC_CMD=(wf-recorder -f "$FILENAME")
+    if [[ -n "$REGION" ]]; then
+        REC_CMD+=(-g "$REGION")
+    elif [[ -n "$OUTPUT" ]]; then
+        REC_CMD+=(-o "$OUTPUT")
+    fi
+    if [[ "$AUDIO" == true ]]; then
+        REC_CMD+=(-a)
+    fi
+elif command -v wl-screenrec &>/dev/null; then
+    REC_CMD=(wl-screenrec -f "$FILENAME")
+    if [[ -n "$REGION" ]]; then
+        REC_CMD+=(--geometry "$REGION")
+    elif [[ -n "$OUTPUT" ]]; then
+        REC_CMD+=(--output "$OUTPUT")
+    fi
+    if [[ "$AUDIO" == true ]]; then
+        REC_CMD+=(--audio)
+    fi
+else
+    echo "qs-record: Neither wf-recorder nor wl-screenrec is installed." >&2
+    exit 1
+fi
+
+"${REC_CMD[@]}" >/dev/null 2>&1 &
+echo $! > "$PID_FILE"

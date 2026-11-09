@@ -1,0 +1,65 @@
+# ==============================================================================
+# RETRO SAKURA / MINIMAL PIXEL - ALACRITTY CONFIGURATION
+# ==============================================================================
+
+[window]
+padding = { x = 12, y = 12 }
+decorations = "None"
+dynamic_title = true
+opacity = 1.0
+
+[font]
+size = 13.0
+
+[font.normal]
+family = "Kibernetyk Mono"
+style = "Regular"
+
+[font.bold]
+family = "Kibernetyk Mono"
+style = "Bold"
+
+[font.italic]
+family = "Kibernetyk Mono"
+style = "Italic"
+
+[font.bold_italic]
+family = "Kibernetyk Mono"
+style = "Bold Italic"
+
+[cursor]
+style = { shape = "Block", blinking = "On" }
+blink_interval = 500
+unfocused_hollow = false
+
+[colors.primary]
+background = "#060608"
+foreground = "#ffffff"
+
+[colors.cursor]
+text = "#060608"
+cursor = "#f3a6b8"
+
+[colors.selection]
+text = "#ffffff"
+background = "#2e2538"
+
+[colors.normal]
+black   = "#0c0c12"
+red     = "#e06c75"
+green   = "#98c379"
+yellow  = "#e5c07b"
+blue    = "#61afef"
+magenta = "#f3a6b8"
+cyan    = "#56b6c2"
+white   = "#dcdfe4"
+
+[colors.bright]
+black   = "#2e2538"
+red     = "#f07178"
+green   = "#a0d480"
+yellow  = "#ffcb6b"
+blue    = "#82aaff"
+magenta = "#ffb3c6"
+cyan    = "#89ddff"
+white   = "#ffffff"

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# qs - Quickshell command-line wrapper
+# ==============================================================================
+if command -v quickshell &>/dev/null; then
+    exec quickshell "$@"
+else
+    echo "quickshell: command not found. Please install quickshell (e.g. quickshell-git from AUR)." >&2
+    exit 1
+fi

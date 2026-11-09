@@ -1,0 +1,44 @@
+{
+  "primary": {
+    "left": [
+      "tags",
+      "+layout",
+      "title"
+    ],
+    "center": [
+      "ai",
+      "launcher",
+      "+clock",
+      "+kbd",
+      "+bell",
+      "net",
+      "+stats"
+    ],
+    "right": [
+      "recording",
+      "pomodoro",
+      "media",
+      "weather",
+      "+periph",
+      "tuya",
+      "audioswap",
+      "status",
+      "tray"
+    ]
+  },
+  "secondary": {
+    "left": [
+      "tags",
+      "title"
+    ],
+    "center": [
+      "layout",
+      "+weather",
+      "+clock",
+      "+media"
+    ],
+    "right": [
+      "stats"
+    ]
+  }
+}
