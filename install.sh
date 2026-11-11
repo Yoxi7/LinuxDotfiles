@@ -69,7 +69,7 @@ install_dependencies() {
         fzf
         zoxide
         imagemagick
-        swww
+        awww
         stow
         polkit-kde-agent
         grim
