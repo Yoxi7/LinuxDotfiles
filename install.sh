@@ -18,7 +18,7 @@ RED='\033[38;2;224;108;117m'
 RESET='\033[0m'
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_MODULES=("mango" "quickshell" "alacritty" "bin")
+CONFIG_MODULES=("mango" "quickshell" "alacritty" "bin" "zsh" "starship")
 
 banner() {
     cat << "EOF"
@@ -58,6 +58,10 @@ install_dependencies() {
         git
         cmake
         ninja
+        zsh
+        starship
+        zsh-autosuggestions
+        zsh-syntax-highlighting
         alacritty
         yazi
         ffmpegthumbnailer
@@ -287,6 +291,9 @@ deploy_stow() {
 
     for mod in "${CONFIG_MODULES[@]}"; do
         local target="$HOME/.config/$mod"
+        if [[ "$mod" == "zsh" ]]; then
+            target="$HOME/.zshrc"
+        fi
         if [[ "$mod" == "bin" ]]; then
             # bin module targets .local/bin directly or files inside it
             continue

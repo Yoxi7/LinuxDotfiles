@@ -1,0 +1,50 @@
+# ==============================================================================
+# RETRO SAKURA / MINIMAL PIXEL - STARSHIP PROMPT CONFIGURATION
+# ==============================================================================
+
+# Do not add blank lines between prompts
+add_newline = false
+
+# Layout: directory -> git branch -> git status -> command duration (if >2s)
+# Next line: minimal Sakura prompt symbol
+format = """
+$directory$git_branch$git_status$cmd_duration
+$character"""
+
+[character]
+success_symbol = "[❯](bold #f3a6b8)"      # Pastel Sakura Pink on success
+error_symbol = "[❯](bold #ff6961)"        # Red on error
+vimcmd_symbol = "[❮](bold #888899)"       # Muted gray for vi-mode normal
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+style = "bold #ffffff"
+format = "[$path]($style) "
+
+[git_branch]
+symbol = " "
+style = "#ea7a99"
+format = "on [$symbol$branch]($style) "
+
+[git_status]
+style = "#ffd60a"
+format = "([$all_status$ahead_behind]($style) )"
+conflicted = "🏳 "
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "⇕⇡${ahead_count}⇣${behind_count} "
+untracked = "? "
+stashed = "📦 "
+modified = "! "
+staged = "+ "
+renamed = "» "
+deleted = "✘ "
+
+[cmd_duration]
+min_time = 2_000                          # Only display if command took >2s
+style = "#888899"
+format = "took [$duration]($style) "
+
+[line_break]
+disabled = false
