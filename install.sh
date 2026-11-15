@@ -18,7 +18,7 @@ RED='\033[38;2;224;108;117m'
 RESET='\033[0m'
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_MODULES=("mango" "quickshell" "alacritty" "bin" "zsh" "starship")
+CONFIG_MODULES=("mango" "quickshell" "alacritty" "bin" "zsh" "starship" "gtk")
 
 banner() {
     cat << "EOF"
@@ -63,7 +63,7 @@ install_dependencies() {
         zsh-autosuggestions
         zsh-syntax-highlighting
         alacritty
-        yazi
+        thunar
         ffmpegthumbnailer
         p7zip
         jq

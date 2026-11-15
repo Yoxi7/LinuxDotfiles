@@ -60,6 +60,11 @@ ModalWindow {
         entries = entries.filter(x => x !== e)
         list.currentIndex = Math.min(i, shown.length - 1)
     }
+    function clearAll() {
+        Quickshell.execDetached(["cliphist", "wipe"])
+        entries = []
+        list.currentIndex = 0
+    }
     function cycleKind() { kind = kind === "all" ? "text" : kind === "text" ? "image" : "all"; list.currentIndex = 0 }
 
     onKeyPressed: e => {
@@ -103,6 +108,15 @@ ModalWindow {
             font { family: Theme.font; pixelSize: 16 }
             onTextChanged: { root.query = text; list.currentIndex = 0 }
             Keys.onTabPressed: root.cycleKind()
+            Keys.onDeletePressed: e => {
+                if ((e.modifiers & Qt.ControlModifier) && (e.modifiers & Qt.ShiftModifier)) {
+                    root.clearAll()
+                    e.accepted = true
+                } else if (e.modifiers & Qt.ShiftModifier) {
+                    root.remove(root.shown[list.currentIndex])
+                    e.accepted = true
+                }
+            }
             Text {
                 visible: !input.text
                 text: "Буфер обмена…"
@@ -175,7 +189,7 @@ ModalWindow {
     }
     Text {
         anchors { verticalCenter: chips.verticalCenter; right: hideBtn.left; rightMargin: 14 }
-        text: root.hide ? "Наведи курсор, чтобы увидеть  ·  Enter — копировать  ·  Ctrl+H" : "Enter — копировать  ·  Shift+Del — удалить  ·  Tab — фильтр"
+        text: root.hide ? "Наведи курсор, чтобы увидеть  ·  Enter — копировать  ·  Ctrl+H" : "Enter — копировать  ·  Shift+Del — удалить  ·  Ctrl+Shift+Del — очистить  ·  Tab — фильтр"
         color: Theme.faint
         font { family: Theme.font; pixelSize: 11 }
     }

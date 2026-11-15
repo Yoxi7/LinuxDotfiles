@@ -1926,7 +1926,7 @@ ModalWindow {
                     visible: root.preview !== null && !root.preview.online
                     icon: ""
                     text: "В файловом менеджере"
-                    onClicked: { const p = root.preview.path; Modal.close(); Quickshell.execDetached(["alacritty", "-e", "yazi", p]) }
+                    onClicked: { const p = root.preview.path; Modal.close(); Quickshell.execDetached(["thunar", p]) }
                 }
                 PvBtn {
                     visible: root.preview?.online ?? false

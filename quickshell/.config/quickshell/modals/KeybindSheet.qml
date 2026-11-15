@@ -45,7 +45,7 @@ ModalWindow {
     readonly property var dirNames: ({ left: "влево", right: "вправо", up: "вверх", down: "вниз", next: "следующий", prev: "предыдущий" })
     readonly property var spawnNames: ({
         "clip-pick": "Буфер обмена", "mango-keys": "Шпаргалка", "waypaper": "Обои", "powermenu": "Меню питания",
-        "alacritty": "Терминал", "alacritty -e yazi": "Файлы (Yazi)", "yazi": "Файлы (Yazi)", "dolphin": "Файлы", "fuzzel": "Лаунчер", "emoji-pick": "Эмодзи",
+        "alacritty": "Терминал", "thunar": "Файлы (Thunar)", "alacritty -e yazi": "Файлы (Yazi)", "dolphin": "Файлы", "fuzzel": "Лаунчер", "emoji-pick": "Эмодзи",
         "ocr": "Распознать текст с экрана", "pavucontrol-qt": "Микшер", "loginctl lock-session": "Заблокировать",
         "wm kill-focused": "Завершить зависшее окно",
         "quickshell ipc call modal dismissOrKill || mmsg dispatch killclient": "Закрыть окно",

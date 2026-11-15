@@ -57,12 +57,15 @@ exec_once = [
     "/usr/lib/polkit-kde-authentication-agent-1",
     "wl-paste --type text --watch cliphist store",
     "wl-paste --type image --watch cliphist store",
+    "gsettings set org.gnome.desktop.interface color-scheme prefer-dark",
+    "gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark",
 ]
 
 # --- Environment Variables ---
 [env]
 "PATH" = "~/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin"
 "XDG_CURRENT_DESKTOP" = "mango"
+"GTK_THEME" = "Adwaita:dark"
 
 # ==============================================================================
 # LAYER & WINDOW RULES
