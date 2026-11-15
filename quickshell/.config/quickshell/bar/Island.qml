@@ -6,7 +6,9 @@ Glass {
     default property alias content: row.data
     implicitWidth: row.implicitWidth + 28
     implicitHeight: Theme.barHeight
-    radius: height / 2
+    radius: 6
+    interactive: false
+    followCursor: false
 
     Row {
         id: row

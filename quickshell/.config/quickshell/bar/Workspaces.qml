@@ -66,7 +66,7 @@ Row {
 
             Rectangle {
                 anchors.fill: parent
-                radius: height / 2
+                radius: 4
                 color: tag.urgent ? Theme.danger : tag.active ? Theme.selected : mouse.containsMouse ? Theme.strong : "transparent"
                 Behavior on color { ColorAnimation { duration: Theme.dFast } }
             }
