@@ -1,14 +1,15 @@
 import QtQuick
 import qs
 
-// Стеклянная капсула под группу виджетов
-Glass {
+// Минималистичный остров под группу виджетов
+Rectangle {
     default property alias content: row.data
     implicitWidth: row.implicitWidth + 28
     implicitHeight: Theme.barHeight
     radius: 6
-    interactive: false
-    followCursor: false
+    color: Theme.glass
+    border.width: 1
+    border.color: Theme.rim
 
     Row {
         id: row
