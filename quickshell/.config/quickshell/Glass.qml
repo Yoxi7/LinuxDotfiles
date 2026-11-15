@@ -72,19 +72,19 @@ Rectangle {
     HoverHandler {
         id: hover
         enabled: root.interactive
-        onHoveredChanged: if (hovered) shineAnim.restart()
+        onHoveredChanged: if (hovered && root.interactive) shineAnim.restart()
     }
     PointHandler { id: press; enabled: root.interactive; acceptedButtons: Qt.AllButtons }
 
-    property real hoverLevel: hover.hovered ? 1 : 0
+    property real hoverLevel: (root.interactive && hover.hovered) ? 1 : 0
     Behavior on hoverLevel { NumberAnimation { duration: Theme.dBase; easing.type: Easing.OutCubic } }
-    property real pressLevel: press.active ? 1 : 0
+    property real pressLevel: (root.interactive && press.active) ? 1 : 0
     Behavior on pressLevel { NumberAnimation { duration: press.active ? 60 : 380; easing.type: Easing.OutCubic } }
     // пятно света догоняет курсор с инерцией — стекло «тянется»
     property real lightX: width / 2
     property real lightY: 0
-    Binding on lightX { when: hover.hovered; value: hover.point.position.x }
-    Binding on lightY { when: hover.hovered; value: hover.point.position.y }
+    Binding on lightX { when: root.interactive && hover.hovered; value: hover.point.position.x }
+    Binding on lightY { when: root.interactive && hover.hovered; value: hover.point.position.y }
     Behavior on lightX { NumberAnimation { duration: Theme.dFast; easing.type: Easing.OutQuad } }
     Behavior on lightY { NumberAnimation { duration: Theme.dFast; easing.type: Easing.OutQuad } }
     property real shine: -1
@@ -99,11 +99,11 @@ Rectangle {
         property real rimWidth: root.rimWidth
         property color rimColor: root.rimColor
         property color glintColor: root.glintColor
-        property real angle: root.lightAngle
-        property real hover: root.hoverLevel
+        property real angle: root.followCursor ? root.lightAngle : Math.atan2(-0.78, -0.63)
+        property real hover: root.interactive ? root.hoverLevel : 0.0
         property point mouse: Qt.point(root.lightX, root.lightY)
-        property real shine: root.shine
-        property real press: root.pressLevel
+        property real shine: root.interactive ? root.shine : -1.0
+        property real press: root.interactive ? root.pressLevel : 0.0
         property real fresnel: root.fresnel
         fragmentShader: Qt.resolvedUrl("shaders/rim.frag.qsb")
     }
